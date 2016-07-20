@@ -1,0 +1,16 @@
+a {
+	text-decoration: none !important;
+	color: #666666;
+}
+
+a: hover {
+	color: #444444;
+}
+
+a: visited {
+	color: #222222;
+}
+
+#description {
+	font-size: 1.4em;
+}
