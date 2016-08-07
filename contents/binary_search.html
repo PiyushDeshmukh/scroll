@@ -2,7 +2,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <html>
 <head>
-	<title>Linear Search - Scroll</title>
+	<title>Binary Search - Scroll</title>
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
@@ -48,12 +48,12 @@
 
   <div class="row container">
     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
-    <a href="../start.html"><i class="glyphicon glyphicon-chevron-left"></i> Getting Started</a>
+    <a href="../start.html"><i class="glyphicon glyphicon-chevron-left"></i> Linear Search</a>
     </div>
     <div class="col-lg-6 col-md-5 col-sm-4 col-xs-0">
     </div>
     <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6">
-    <a href="./binary_search.html">Binary Search <i class="glyphicon glyphicon-chevron-right"></i></a>
+    <a href="./binary_search.html">Bubble Sort <i class="glyphicon glyphicon-chevron-right"></i></a>
     </div>
   </div>
 
@@ -62,15 +62,17 @@
     <div class="col-lg-3 col-md-2 col-sm-1 col-xs-0"></div>
     <div class="col-lg-6 col-md-8 col-sm-10 col-xs-12">
        <br/><br/>
-  	   <h1>Linear Search</h1>
+  	   <h1>Binary Search</h1>
        <br/><br/>
        <div>
-        Linear Search is arguably one of the simplest concepts to start with. Linear search deals with detecting the presence of a particular element in a list. In addition, it can return the index in the list where that element was found.
+        Binary search is a searching technique employed in a sorted array. It is more effective as compared to linear search but it requires the list to be sorted in advance.
         <br/><br/>
-        This searching approach as the name suggests, searches in a sequential fashion, i.e. it compares one element of the list to the corresponding search item and in case of fallacy, it then proceeds to the next element in the list and so on until it reaches the end of the list.
+        Binary search, as the name suggests, makes 2 (almost)equal partitions of the array, a similar technique known as <a href="https://en.wikipedia.org/wiki/Ternary_search">ternary search</a> exists which makes 3 partitions. However lets just focus on making 2 partitions and then ternary search shall be a peice of cake.
         <br/><br/>
-        This works by maintaining an index variable, which stores the current index of the list which is being examined. We start from the zero'th index (in most programming languages including C++ and Python) and then proceed towards higher indices. At each index, we check whether the value of the element stored at that index is equal to the search item, in case if it is equal, we return the value of the index, else we proceed to the next index by incrementing the index variable, and repeat the same until we reach the end of the list. If the search item is not found, we return a pre-determined value (say -1), indicating that the element was not found in the list.
+        Binary search starts by finding the centermost element of the list. It then compares search item with this element, if they are unequal it ignores either the left-half or the right-half of the list depending upon which half should be eliminated, and then search for the element using same technique in the expected slice of the list. Now, the decision of eliminating a particular half should be obvious enough, for instance, consider the array
         <br/><br/>
+		  <pre>12,</pre>
+		  <br/><br/>
         Linear search returns the index of the first element in the list which matches the search item (at least the below implementations), however, they can be modified to reveal all the indices where the dearch item was found.
         <br/><br/>
         Below is an implementation easy to understand, however not recommended way of solving problems.

@@ -11,6 +11,15 @@ a: visited {
 	color: #222222;
 }
 
-#description {
-	font-size: 1.4em;
+@media only screen and (max-width: 767px) {
+	#description {
+		font-size: 1.2em;
+	}
+}
+
+
+@media only screen and (min-width: 767px) {
+	#description {
+		font-size: 1.4em;
+	}
 }
