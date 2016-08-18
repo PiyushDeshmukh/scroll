@@ -12,6 +12,8 @@
   <!-- Custom CSS File -->
   <link rel="stylesheet" href="../css/custom.css">
 
+  <link href="https://fonts.googleapis.com/css?family=PT+Sans|Raleway" rel="stylesheet">
+
 </head>
 <body>
 
@@ -53,7 +55,7 @@
     <div class="col-lg-6 col-md-5 col-sm-4 col-xs-0">
     </div>
     <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6">
-    <a href="./binary_search.html">Bubble Sort <i class="glyphicon glyphicon-chevron-right"></i></a>
+    <a href="./binary_search.html">Bisection Search <i class="glyphicon glyphicon-chevron-right"></i></a>
     </div>
   </div>
 
@@ -71,40 +73,73 @@
         <br/><br/>
         Binary search starts by finding the centermost element of the list. It then compares search item with this element, if they are unequal it ignores either the left-half or the right-half of the list depending upon which half should be eliminated, and then search for the element using same technique in the expected slice of the list. Now, the decision of eliminating a particular half should be obvious enough, for instance, consider the array
         <br/><br/>
-		  <pre>12,</pre>
+		  <pre>102, 103, 105, 107, 111, 113, 117, 119, 123, 127, 129, 131, 137</pre>
 		  <br/><br/>
-        Linear search returns the index of the first element in the list which matches the search item (at least the below implementations), however, they can be modified to reveal all the indices where the dearch item was found.
+        Out of the 13 numbers given in ascending order, say we want to see whether 107 is present in the list. So we start by finding the (almost)centermost index of the list, i.e., the sum of first and the last index of the list to be searched divided by 2. which is (0+12)/2 = 6. Now, we check for whether the value stored at the 6<sup>th</sup> index is equal to 107 which is not the case here as 117 is stored there. Now comes the interesting part where we figure out which half of the list should be ignored and which half should be searched for. Now since the value  found at centermost index, i.e. 117, is greater than 107, we can logically deduce that all the elements that lye on indices greater than that of 117 will not contain 107 as the list is sorted in ascending order. Henceforth, there is no sense searching for 107 at those locations. We now need to search for 107 only in the indices that are smaller than that of 117, i.e. the left half of the original list.
         <br/><br/>
-        Below is an implementation easy to understand, however not recommended way of solving problems.
+		  To do so, we change the last index of the list to 1 less than that of 117, i.e. last index becomes 7-1 = 6. Now with starting index of 0 and last index of 6, we search for 107 using the same approach. This time, the centermost index is (0+6)/2 = 3, and the value stored at 3<sup>rd</sup> index is 107, therefore we return true or the index 3(indicating that we found the number at this index).
+		  <br/><br/>
+		  In short, the algorithm can be summarized as, Check whether the search item is equal to the centermost element of the list, return true if yes, else search for it in the left half of the list if centermost element is greater than the search item, and right half if the centermost element is smaller than the search item.
+		  <br/><br/>
+		  It should also be noted that whenever centermost index is mentioned here, we mean the <a href="http://en.wikipedia.org/wiki/Floor_and_ceiling_functions">floor</a> value of (start+end)/2 as the index value can't be a floating point number.
+		  <br/><br/>
+		  The recursive approach to this algorithm is implemented below in C++, however, recursion is expensive due to repeated push and pop operations onto to the stack, which not only consumes memory, but also a significant amount of time.
+		  <br/><br/>
+        <div>
+          <script src="https://gist.github.com/PiyushDeshmukh/5fdb959656af7f63d1bf2bfd3beca9c0.js"></script>
+        </div>
+        So, we need to have an iterative approach. If you might notice, the only thing we additionally need to do in iterative approach is to change the value of starting and the ending index.
         <br/><br/>
-        </div>
-        <div>
-        <script src="https://gist.github.com/PiyushDeshmukh/98ab9fdf3585943e7c4b318f41e7d9d6.js"></script>
-        </div>
-        <br/><br/>
-        <div>
-        The above shown implementation is bad because it contains multiple return statements, which is not a good habit while programming large softwares. The approach below is encouraged.
-        </div>
-        <br/><br/>
-        <div>
-          <script src="https://gist.github.com/PiyushDeshmukh/67b0cd253f345de5aefe4cfe8895a563.js"></script>
-        </div>
-        <div>
-        You can use vector library to represent array, however we have used them in the traditional way.
-        <br/><br/>
-        </div>
-        <div>
-        The same can be implemented in python as following
-        <br/><br/>
-        </div>
-        <div>
-          <script src="https://gist.github.com/PiyushDeshmukh/3e472f001985c69702242b05f8f0dbd4.js"></script>
-        </div>
-        <div>
-        <br/><br/>
-        It should be noted that linear search can be implemented in different ways. We can start searching from last to first index, however this does not change the complexity of the algorithm. Linear search runs in O(n) time, as it compares n elements to the search item in the worst case.
-        <br/><br/><br/><br/>
-        </div>
+		  <pre>
+int mid = (start + end) / 2;
+while (start <= mid && mid <= end)
+{
+	if (array[mid] == n)
+		return mid;
+	else if (array[mid] < n)
+		start = mid + 1;
+	else
+		end = mid - 1;
+	mid = (start + end) / 2;
+}
+return -1;
+		  </pre>
+		  <br/>
+		  Still, there are some caveats to be entertained here.
+		  <br/><br/>
+		  Firstly, make sure that your list is sorted in ascending order. If it is in descending order, you need to make minor changes in the logic(I won't tell, I am dumb enough).
+		  <br/><br/>
+		  And more importantly, this one line, can break your code.
+		  <br/><br/>
+		  <pre>int mid = (start + end) / 2;</pre>
+		  <br/>
+		  When searching smaller lists, this may not be a problem, but when the size of your list is too large, the sum of `start+end` may exceed the integer range limits(even when both `start` and `end` are within the integer ranges), and then you get a corrupt value for the `mid` variable. In order to avoid <a href="https://en.wikipedia.org/wiki/Integer_overflow">integer overflow</a>, you should use
+		  <br/><br/>
+		  <pre>int mid = start + (end - start) / 2;</pre>
+		  <br/>
+		  This is mathematically equivalent to our previous expression, and also computationally safe.
+		  <br/><br/>
+		  <div>
+			  <script src="https://gist.github.com/PiyushDeshmukh/15c276da469aa7b236974233fb152f6e.js"></script>
+		  </div>
+		  <br/><br/>
+			Below is an implementation in python, however, you may find it easy to implement using <a href="https://docs.python.org/3.5/library/bisect.html">bisect</a>.
+			<br/><br/>
+			<div>
+				<script src="https://gist.github.com/PiyushDeshmukh/5a20607d10358872e47122d1ea2e252e.js"></script>
+			</div>
+			<br/><br/>
+			Binary search does the job in a time bound of O(log(n)), however it should be always be noted that it requires the search string to be sorted already. When said log(n), we are dealing with base 2, as it makes 2 parts of the list everytime. If it were 3 parts as in case of <a href="https://en.wikipedia.org/wiki/Ternary_search">Ternary Search</a>, then it would be log<sub>3</sub>(n), if it were 4 parts, then base 4. However, it should be noted that though it is increase in performance but not optimization with respect to mathematical complexity which remains the same as log<sub>2</sub>(n) as any case for k partitions can be broken mathematically as follows
+			<br/><br/>
+			<pre>
+log<sub>k</sub>(n)
+= log<sub>2</sub>(n) / log<sub>2</sub>(k)
+= log<sub>2</sub>(n) / constant
+= O(log<sub>2</sub>(n))
+			</pre>
+			<br/><br/>
+			There also exists a similar technique <a href="https://en.wikipedia.org/wiki/Bisection_method">Bisection Search</a> which works the same way as binary search, and is extremely useful in some cases, we will be looking onto it next.
+			<br/><br/>
     </div>
     <div class="col-lg-3 col-md-2 col-sm-1 col-xs-0"></div>
   </div>

@@ -13,13 +13,16 @@ a: visited {
 
 @media only screen and (max-width: 767px) {
 	#description {
-		font-size: 1.2em;
+		font-size: 1.3em;
+		font-family: "Raleway", 'PT Sans', sans-serif;
 	}
 }
 
 
 @media only screen and (min-width: 767px) {
 	#description {
-		font-size: 1.4em;
+		font-size: 1.5em;
+		/*font-family: 'PT Sans', "Raleway", sans-serif;*/
+		font-family: "Raleway", 'PT Sans', sans-serif;
 	}
 }
